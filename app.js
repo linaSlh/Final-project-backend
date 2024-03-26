@@ -3,9 +3,10 @@ require('dotenv').config();
 require("./db");
 const express = require("express");
 const { isAuthenticated } = require("./middleware/jwt.middleware");
-
+//added by me
+const cors = require('cors');
 const app = express();
-
+app.use(cors({ origin: 'http://localhost:5173' }));
 require("./config")(app);
 
 // 👇 Start handling routes here
