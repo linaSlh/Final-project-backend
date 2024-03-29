@@ -22,5 +22,7 @@ const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);
 
 // require("./error-handling")(app);
-
+//comment
+const commentRouter = require("./routes/comment.routes");
+app.use("/api", isAuthenticated, commentRouter);
 module.exports = app;
