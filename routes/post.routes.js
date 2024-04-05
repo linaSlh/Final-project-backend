@@ -1,21 +1,4 @@
-// // routes/posts.routes.js
 
-// const express = require("express");
-// const router = express.Router();
-// const mongoose = require("mongoose");
-// // const mongoose = require("mongoose");
-
-// const post = require("../models/Post.model");
-// const comment = require("../models/comment.model");
-
-// //  POST /api/posts  -  Creates a new post
-// router.post("/posts", (req, res, next) => {
-//   const { title, description } = req.body;
-
-//   post.create({ title, description, comment: [] })
-//     .then(response => res.json(response))
-//     .catch(err => res.json(err));
-// });
 
 // module.exports = router;
 

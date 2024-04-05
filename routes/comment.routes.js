@@ -1,30 +1,4 @@
-// const express = require("express");
-// const router = express.Router();
-// const mongoose = require("mongoose");
 
-// const post = require("../models/Post.model");
-// const comment = require("../models/Comment.model");
-
-// //  POST /api/posts  -  Creates a new post
-// router.post("/posts/:postId/comments", (req, res, next) => {
-//   const { yourcomment } = req.body;
-//   const { postId } = req.params;
-
-//   comment.create({ yourcomment, author: req.payload._id })
-//     .then((newComment) => {
-//       // Find the post by ID and add the newly created comment to its comments array
-//       post.findByIdAndUpdate(postId, { $push: { comments: newComment._id } }, { new: true })
-//         .then((updatedPost) => res.json(updatedPost))
-//         .catch((err) => {
-//           console.log("Error while updating the post with new comment", err);
-//           res.status(500).json({ message: "Error while updating the post with new comment" });
-//         });
-//     })
-//     .catch((err) => {
-//       console.log("Error while creating the comment", err);
-//       res.status(500).json({ message: "Error while creating the comment" });
-//     });
-// });
 
 // module.exports = router;
  
