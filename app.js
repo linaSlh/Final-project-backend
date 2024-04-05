@@ -26,3 +26,6 @@ app.use("/auth", authRouter);
 const commentRouter = require("./routes/comment.routes");
 app.use("/api", isAuthenticated, commentRouter);
 module.exports = app;
+
+const indexRoutes = require("./routes/index.routes");
+app.use("/", indexRoutes);
