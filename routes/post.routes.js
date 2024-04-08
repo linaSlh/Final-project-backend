@@ -21,6 +21,8 @@ console.log(req.payload._id);
     });
 });
 
+
+
 //  GET /api/posts -  Retrieves all of the posts
 router.get("/posts", (req, res, next) => {
   post.find()
@@ -44,7 +46,10 @@ router.get("/posts/:postId", (req, res, next) => {
   // Each post document has `tasks` array holding `_id`s of Task documents
   // We use .populate() method to get swap the `_id`s for the actual Task documents
   post.findById(postId)
-    // .populate("comments")
+  .populate({
+    path: 'author',
+    select: 'username' // Select only the 'username' field from the referenced User document
+  })
     .then((post) => res.status(200).json(post))
     .catch((err) => {
       console.log("Error while retrieving the post", err);
