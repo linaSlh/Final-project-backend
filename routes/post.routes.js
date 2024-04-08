@@ -24,7 +24,7 @@ console.log(req.payload._id);
 //  GET /api/posts -  Retrieves all of the posts
 router.get("/posts", (req, res, next) => {
   post.find()
-    populate("comment")
+    // .populate("comment")
     .then((allposts) => res.json(allposts))
     .catch((err) => {
       console.log("Error while getting the postss", err);
@@ -44,7 +44,7 @@ router.get("/posts/:postId", (req, res, next) => {
   // Each post document has `tasks` array holding `_id`s of Task documents
   // We use .populate() method to get swap the `_id`s for the actual Task documents
   post.findById(postId)
-    populate("comment")
+    // .populate("comments")
     .then((post) => res.status(200).json(post))
     .catch((err) => {
       console.log("Error while retrieving the post", err);
