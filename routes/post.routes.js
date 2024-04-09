@@ -35,7 +35,7 @@ router.get("/posts", (req, res, next) => {
 });
 
 //  GET /api/posts/:postId -  Retrieves a specific post by id
-router.get("/posts/:postId", (req, res, next) => {
+router.get("/posts/:postId",async (req, res, next) => {
   const { postId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(postId)) {
@@ -43,23 +43,67 @@ router.get("/posts/:postId", (req, res, next) => {
     return;
   }
 
-  // Each post document has `tasks` array holding `_id`s of Task documents
-  // We use .populate() method to get swap the `_id`s for the actual Task documents
-  post.findById(postId)
-  // .populate({
-  //   path: 'author',
-  //   select: 'username' // Select only the 'username' field from the referenced User document
-  // })
-    .then((post) => res.status(200).json(post))
-    .catch((err) => {
-      console.log("Error while retrieving the post", err);
-      res.status(500).json({ message: "Error while retrieving the post" });
-    });
+ 
+  try {
+    // Retrieve the post
+    const retrievedPost = await post.findById(postId);
+    
+    if (!retrievedPost) {
+      res.status(404).json({ message: "Post not found" });
+      return;
+    }
+
+    // Fetch the author's user ID from the retrieved post
+    const authorId = retrievedPost.author;
+
+    // Retrieve the user document using the author ID
+    const author = await User.findById(authorId);
+    
+    if (!author) {
+      res.status(404).json({ message: "Author not found" });
+      return;
+    }
+
+    // Extract the username from the author document
+    const username = author.username;
+
+    // Include the author's username in the post object
+    const postWithAuthor = { ...retrievedPost.toObject(), author: username };
+    
+    // Send the response with the post containing the author's username
+    res.status(200).json(postWithAuthor);
+  } catch (err) {
+    console.log("Error while retrieving the post", err);
+    res.status(500).json({ message: "Error while retrieving the post" });
+  }
 });
+
+
+
+
+
+
+
+
+//   post.findById(postId)
+//   // .populate({
+//   //   path: 'author',
+//   //   select: 'username' // Select only the 'username' field from the referenced User document
+//   // })
+//     .then((post) => res.status(200).json(post))
+//     .catch((err) => {
+//       console.log("Error while retrieving the post", err);
+//       res.status(500).json({ message: "Error while retrieving the post" });
+//     });
+// });
+
+
+
+
 
 // PUT  /api/posts/:postId  -  Updates a specific post by id
 router.put("/posts/:postId", (req, res, next) => {
-  const { postId } = req.params;
+  const { postId } = req.params;9666
 
   if (!mongoose.Types.ObjectId.isValid(postId)) {
     res.status(400).json({ message: "Specified id is not valid" });
