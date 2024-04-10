@@ -28,15 +28,18 @@ var upost =[];
 var name = [];
 router.get("/posts", (req, res, next) => {
   post.find()
-    // .populate("comments")
-    .then((allposts) => {
+    .populate("author")
+    .then((allposts) =>
+     {  console.log(allposts);
         let posts = allposts;
         posts.map( async (post) => {
+        
 	//	let tmp = await User.findById(post.author);
 		let nom = await User.findById(post.author);
 		name.push(nom.username);
 		Aposts.push(post);
   });
+
 })
   whenDone(res);
 })
