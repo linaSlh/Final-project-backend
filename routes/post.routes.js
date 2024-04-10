@@ -35,8 +35,8 @@ router.get("/posts", (req, res, next) => {
         posts.map( async (post) => {
         
 	//	let tmp = await User.findById(post.author);
-		let nom = await User.findById(post.author);
-		name.push(nom.username);
+		// let nom = await User.findById(post.author);
+		// name.push(nom.username);
 		Aposts.push(post);
   });
 
@@ -178,7 +178,7 @@ post.findById(postId)
 
 // PUT  /api/posts/:postId  -  Updates a specific post by id
 router.put("/posts/:postId", (req, res, next) => {
-  const { postId } = req.params;9666
+  const { postId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(postId)) {
     res.status(400).json({ message: "Specified id is not valid" });
