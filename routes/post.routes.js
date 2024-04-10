@@ -41,10 +41,10 @@ router.get("/posts", (req, res, next) => {
   whenDone(res);
 })
 
-.catch((err) => {
-  console.log("Error while getting the postss", err);
-  res.status(500).json({ message: "Error while getting the posts" });
-});
+// .catch((err) => {
+//   console.log("Error while getting the postss", err);
+//   res.status(500).json({ message: "Error while getting the posts" });
+// });
 
 
 
