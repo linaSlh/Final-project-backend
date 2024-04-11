@@ -262,48 +262,30 @@ router.post("/posts", (req, res, next) => {
 });
 
 
-var Aposts = [];
-var upost =[];
-var name = [];
-router.get("/posts", (req, res, next) => {
-  post.find()
-    .populate("author")
-    .then((allposts) =>
-     {  console.log(allposts);
-        let posts = allposts;
-        posts.map( async (post) => {
-        
-	//	let tmp = await User.findById(post.author);
-		// let nom = await User.findById(post.author);
-		// name.push(nom.username);
-		Aposts.push(post);
-  });
-
-})
-  whenDone(res);
-})
-
-// .catch((err) => {
-//   console.log("Error while getting the postss", err);
-//   res.status(500).json({ message: "Error while getting the posts" });
-// });
-
-
-
-
-  function whenDone(res) {
-    //you should be able to access fixedItems here
-	for ( i = 0; i < name.length; i++) { 
-	Aposts[i].user = name[i];
-	}
-//	console.log(Aposts);
-//	console.log(upost);
-	console.log(Aposts[5]);
-    res.json(Aposts);
-
-	console.log(name.length , Aposts.length);
+// var Aposts = [];
+// var upost =[];
+// var name = [];
+router.get("/posts", async (req, res, next) => {
+  try {
+    const allposts = await post.find().populate("author");
+    const Apo = allposts.map(async (post) => {
+      const user = await User.findById(post.author);
+      return { ...post.toObject(), user: user.username };
+    });
+    const Ap = await Promise.all(Apo);
+    res.json(Ap);
+  } catch (err) {
+    console.log("Error while getting the posts", err);
+    res.status(500).json({ message: "Error while getting the posts" });
   }
+});
 
+ 
+
+
+
+
+ 
 
 
 
@@ -338,25 +320,17 @@ router.get("/posts/:postId",(req, res, next) => {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
   }
-  User.findById(Author)
-  .then((post) => {
-         res.status(200).json(User);
-        console.log(User);
-        })
+  post.findById(postId)
+  .populate('author')
+  .then((post) => res.status(200).json(post))
 .catch((err) => {
    console.log("Error while retrieving the author", err);
    res.status(500).json({ message: "Error while retrieving the Author" });
  });
+});
 // Each post document has `tasks` array holding `_id`s of Task documents
 // We use .populate() method to get swap the `_id`s for the actual Task documents
-post.findById(postId)
- // .populate("comments")
- .then((post) => res.status(200).json(post))
- .catch((err) => {
-   console.log("Error while retrieving the post", err);
-   res.status(500).json({ message: "Error while retrieving the post" });
- });
-});
+
  
   // try {
   //   // Retrieve the post
