@@ -24,7 +24,7 @@ router.get("/posts", async (req, res, next) => {
     const allposts = await post.find().populate("author");
     const Ap = await Promise.all(allposts.map(async (post) => {
       const user = await User.findById(post.author);
-      return { ...post.toObject(), user: user.username };
+      return { ...post, user: user.username };
     }));
     res.json(Ap);
   } catch (err) {
