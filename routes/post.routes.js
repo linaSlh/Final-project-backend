@@ -3,7 +3,6 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const post = require("../models/Post.model");
-const comment = require("../models/Comment.model");
 const User = require("../models/User.model");
 
 // POST /api/posts - Creates a new post
@@ -21,12 +20,18 @@ router.post("/posts", (req, res, next) => {
 // GET /api/posts - Retrieves all posts
 router.get("/posts", async (req, res, next) => {
   try {
-    const allposts = await post.find().populate("author");
-    const Ap = await Promise.all(allposts.map(async (post) => {
+    const allPosts = await post.find().populate("author");
+
+    const populatedPosts = await Promise.all(allPosts.map(async (post) => {
       const user = await User.findById(post.author);
-      return { ...post.toObject(), user: user.username };
+      const username = user ? user.username : null;
+
+      const { _id, title, content, region, createdAt } = post;
+
+      return { _id, title, content, region, createdAt, user: username };
     }));
-    res.json(Ap);
+
+    res.json(populatedPosts);
   } catch (err) {
     console.log("Error while getting the posts", err);
     res.status(500).json({ message: "Error while getting the posts" });
@@ -72,7 +77,11 @@ router.delete("/posts/:postId", (req, res, next) => {
     return;
   }
   post.findOneAndDelete({ _id: postId })
-    .then(() => res.json({ message: `post with ${postId} is removed successfully.` }))
+    .then(() =>
+      res.json({
+        message: `post with ${postId} is removed successfully.`,
+      })
+    )
     .catch((err) => {
       console.log("Error while deleting the post", err);
       res.status(500).json({ message: "Error while deleting the post" });
